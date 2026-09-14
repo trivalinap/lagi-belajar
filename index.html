@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeMate - Kalkulator Nilai Akhir</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* -------------------------------------- */
+        /* LAYAR 1: LANDING PAGE / WELCOME SCREEN */
+        /* -------------------------------------- */
+        #welcomeScreen {
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 8px 16px rgba(42, 82, 152, 0.25);
+        }
+
+        #welcomeScreen h1 {
+            font-size: 28px;
+            color: #1e3c72;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        #welcomeScreen p {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        /* -------------------------------------- */
+        /* LAYAR 2: KALKULATOR SCREEN             */
+        /* -------------------------------------- */
+        #calcScreen {
+            display: none; /* Sembunyi secara default */
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 24px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        .btn-back {
+            position: absolute;
+            left: 16px;
+            top: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .form-body {
+            padding: 24px;
+        }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 6px;
+        }
+
+        .input-group input {
+            padding: 10px 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: #2a5298;
+            box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.15);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #2a5298;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: #1e3c72;
+        }
+
+        .btn-secondary {
+            background-color: #edf2f7;
+            color: #4a5568;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+        }
+
+        .result-card {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 10px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            display: none;
+            text-align: center;
+        }
+
+        .result-card.show {
+            display: block;
+        }
+
+        .grade-badge {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            margin: 10px 0;
+        }
+
+        .grade-A { background-color: #38a169; }
+        .grade-B { background-color: #3182ce; }
+        .grade-C { background-color: #d69e2e; }
+        .grade-D { background-color: #dd6b20; }
+        .grade-E { background-color: #e53e3e; }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- ==================== LAYAR 1: WELCOME SCREEN ==================== -->
+        <div id="welcomeScreen">
+            <div class="logo-icon">GM</div>
+            <h1>GradeMate</h1>
+            <p>Aplikasi praktis untuk menghitung Nilai Akhir & Grade Mahasiswa secara cepat dan akurat.</p>
+            <button class="btn btn-primary" onclick="bukaKalkulator()">Mulai Menghitung &rarr;</button>
+        </div>
+
+        <!-- ==================== LAYAR 2: KALKULATOR SCREEN ==================== -->
+        <div id="calcScreen">
+            <div class="header">
+                <button class="btn-back" onclick="kembaliKeWelcome()">&larr; Beranda</button>
+                <h1>Kalkulator Nilai Akhir</h1>
+                <p>Hitung Nilai Akhir & Grade Mahasiswa</p>
+            </div>
+
+            <div class="form-body">
+                <form id="calcForm">
+                    <div class="grid-inputs">
+                        <div class="input-group">
+                            <label for="tugas">Nilai Tugas (20%)</label>
+                            <input type="number" id="tugas" min="0" max="100" placeholder="0 - 100">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="quiz">Nilai Quiz (20%)</label>
+                            <input type="number" id="quiz" min="0" max="100" placeholder="0 - 100">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="uts">Nilai UTS (30%)</label>
+                            <input type="number" id="uts" min="0" max="100" placeholder="0 - 100">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="uas">Nilai UAS (30%)</label>
+                            <input type="number" id="uas" min="0" max="100" placeholder="0 - 100">
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary" onclick="hitungNilai()">Hitung Nilai Akhir</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset Form</button>
+                </form>
+
+                <div id="errorMessage" class="error-message"></div>
+
+                <div id="resultCard" class="result-card">
+                    <p style="font-size: 14px; color: #718096;">Grade Akhir:</p>
+                    <div id="gradeBadge" class="grade-badge">-</div>
+                    <p style="font-size: 16px; font-weight: 600; color: #2d3748;">
+                        Nilai Akhir: <span id="nilaiAkhirVal">0</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi Pindah Halaman / Layar
+        function bukaKalkulator() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('calcScreen').style.display = 'block';
+        }
+
+        function kembaliKeWelcome() {
+            document.getElementById('calcScreen').style.display = 'none';
+            document.getElementById('welcomeScreen').style.display = 'block';
+        }
+
+        // Fungsi Hitung Nilai
+        function hitungNilai() {
+            let tugas = parseFloat(document.getElementById('tugas').value);
+            let quiz = parseFloat(document.getElementById('quiz').value);
+            let uts = parseFloat(document.getElementById('uts').value);
+            let uas = parseFloat(document.getElementById('uas').value);
+
+            let errorDiv = document.getElementById('errorMessage');
+            let resultCard = document.getElementById('resultCard');
+
+            errorDiv.style.display = 'none';
+
+            if (isNaN(tugas) || isNaN(quiz) || isNaN(uts) || isNaN(uas)) {
+                errorDiv.innerText = "Error: Semua kolom nilai harus diisi!";
+                errorDiv.style.display = 'block';
+                resultCard.classList.remove('show');
+                return;
+            }
+
+            if (tugas < 0 || tugas > 100 || quiz < 0 || quiz > 100 || uts < 0 || uts > 100 || uas < 0 || uas > 100) {
+                errorDiv.innerText = "Error: Semua nilai harus berada di rentang 0 - 100!";
+                errorDiv.style.display = 'block';
+                resultCard.classList.remove('show');
+                return;
+            }
+
+            let nilaiAkhir = (tugas * 0.2) + (quiz * 0.2) + (uts * 0.3) + (uas * 0.3);
+            let grade = '';
+
+            if (nilaiAkhir >= 80) {
+                grade = 'A';
+            } else if (nilaiAkhir >= 70) {
+                grade = 'B';
+            } else if (nilaiAkhir >= 60) {
+                grade = 'C';
+            } else if (nilaiAkhir >= 50) {
+                grade = 'D';
+            } else {
+                grade = 'E';
+            }
+
+            document.getElementById('nilaiAkhirVal').innerText = nilaiAkhir.toFixed(2);
+            let badge = document.getElementById('gradeBadge');
+            badge.innerText = grade;
+            badge.className = 'grade-badge grade-' + grade;
+
+            resultCard.classList.add('show');
+        }
+
+        function resetForm() {
+            document.getElementById('calcForm').reset();
+            document.getElementById('resultCard').classList.remove('show');
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
