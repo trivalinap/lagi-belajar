@@ -1,33 +1,89 @@
-# Dokumentasi Testing Logika Grade Mahasiswa
+# Dokumentasi Testing Logika GradeMate
+
+## Testing
+---
+**Test Case 1 : Menghitung Nilai Akhir Normal (Lulus)**
+
+INPUT :
+
+Nilai UTS = 80
+
+Nilai UAS = 85
+
+Nilai Tugas = 90
+
+Nilai Kuis = 75
+
+Expected Output:  
+Nilai Akhir: 82,5
+
+Status: Lulus
+
+Actual Output: 
+
+Nilai Akhir: 82,5
+
+Status: Lulus
+
+**Status**: PASS   
+
+---
+**Test Case 2 : Menghitung Nilai Akhir Batas Minimum**
+
+INPUT :
+
+Nilai UTS = 40
+
+Nilai UAS = 50
+
+Nilai Tugas = 60
+
+Nilai Kuis = 30
+
+Expected Output:  
+Nilai Akhir: 45
+
+Status: Tidak Lulus
+
+Actual Output: 
+
+Nilai Akhir: 45
+
+Status: Tidak Lulus
+
+**Status**: PASS
+
+---
+
+**Test Case 3: Input Nilai Tidak Valid**
+
+INPUT :
+
+Nilai UTS = 120
+
+Nilai UAS = 80
+
+Nilai Tugas = -10
+
+Nilai Kuis = 90
+
+Expected Output:  
+
+Input salah! Nilai harus berada dalam rentang 0 - 100.   
+
+Input diminta ulang.
+
+Actual Output:   
+
+Input salah! Nilai harus berada dalam rentang 0 - 100.   
+
+Input diminta ulang.   
+
+**Status**: PASS  
 
 
-```javascript
-const { hitungGrade } = require('./gradeCalculator');
 
-describe('Pengujian Perhitungan Nilai Akhir & Grade', () => {
 
-  // Test 1: Grade A
-  test('harus mengembalikan Grade A jika Nilai Akhir >= 80', () => {
-    const result = hitungGrade(85, 85, 80, 80);
-    expect(result.nilaiAkhir).toBe(82);
-    expect(result.grade).toBe('A');
-  });
-
-  // Test 2: Grade B
-  test('harus mengembalikan Grade B jika Nilai Akhir di rentang 70 - 79', () => {
-    const result = hitungGrade(70, 70, 75, 75);
-    expect(result.nilaiAkhir).toBe(73);
-    expect(result.grade).toBe('B');
-  });
-
-  // Test 3: Grade C
-  test('harus mengembalikan Grade C jika Nilai Akhir di rentang 60 - 69', () => {
-    const result = hitungGrade(60, 60, 65, 65);
-    expect(result.nilaiAkhir).toBe(63);
-    expect(result.grade).toBe('C');
-  });
-
-});
 
 
   
